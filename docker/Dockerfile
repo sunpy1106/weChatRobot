@@ -1,6 +1,7 @@
 FROM maven:3.8.4-jdk-8-slim as builder
 
 COPY . /src/weChatRobot
+mkdir -p  /usr/share/maven/ref
 COPY ./docker/settings-docker.xml /usr/share/maven/ref/
 WORKDIR /src/weChatRobot
 RUN mvn package -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
