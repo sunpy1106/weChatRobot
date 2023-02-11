@@ -14,6 +14,6 @@ COPY start.sh /weChatRobot/
 
 RUN chmod +x /weChatRobot/start.sh
 
-EXPOSE 8080
+EXPOSE 80
 WORKDIR /weChatRobot
 ENTRYPOINT [ "sh", "start.sh" ]
