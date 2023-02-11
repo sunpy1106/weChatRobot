@@ -1,8 +1,5 @@
 FROM maven:3.8.4-jdk-8-slim as builder
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y git
-RUN git clone https://github.com/sunpy1106/weChatRobot.git
+
 RUN cd weChatRobot
 COPY . /src/weChatRobot
 RUN mkdir -p  /usr/share/maven/ref
