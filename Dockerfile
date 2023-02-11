@@ -1,10 +1,9 @@
-FROM maven:3.8.4-jdk-8-slim as builder
-USER root
-
+FROM maven:3.6.0-jdk-8-slim as build
 COPY . /src/weChatRobot
-
+COPY ./settings-docker.xml /src/weChatRobot/
 WORKDIR /src/weChatRobot
-RUN mvn package  dependency:resolve
+
+RUN mvn -s /src/weChatRobot/settings-docker.xml clean package
 
 FROM openjdk:8-alpine
 
