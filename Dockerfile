@@ -9,7 +9,7 @@ FROM openjdk:8-alpine
 
 USER root
 
-COPY --from=builder /src/weChatRobot/robot-web/target/weChatRobot.jar /weChatRobot/
+COPY --from=build /src/weChatRobot/robot-web/target/weChatRobot.jar /weChatRobot/
 COPY start.sh /weChatRobot/
 
 RUN chmod +x /weChatRobot/start.sh
