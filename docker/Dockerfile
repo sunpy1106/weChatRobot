@@ -1,6 +1,5 @@
 FROM maven:3.8.4-jdk-8-slim as builder
 
-RUN cd weChatRobot
 COPY . /src/weChatRobot
 RUN mkdir -p  /usr/share/maven/ref
 COPY ./docker/settings-docker.xml /usr/share/maven/ref/
