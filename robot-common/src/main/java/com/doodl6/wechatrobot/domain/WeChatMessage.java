@@ -13,6 +13,9 @@ import lombok.Setter;
 @JsonRootName("xml")
 public class WeChatMessage {
 
+    @JsonProperty("URL")
+    private String URL;
+
     @JsonProperty("ToUserName")
     private String toUserName;
 
@@ -37,7 +40,6 @@ public class WeChatMessage {
     @JsonProperty("MsgId")
     private Long msgId;
 
-    @JsonProperty("URL")
-    private String URL;
+
 
 }
