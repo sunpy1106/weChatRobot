@@ -37,4 +37,7 @@ public class WeChatMessage {
     @JsonProperty("MsgId")
     private Long msgId;
 
+    @JsonProperty("URL")
+    private String URL;
+
 }

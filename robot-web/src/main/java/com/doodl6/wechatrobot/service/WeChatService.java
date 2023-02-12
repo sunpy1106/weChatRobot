@@ -43,6 +43,7 @@ public class WeChatService {
         String[] arr = new String[]{appConfig.getToken(), timestamp, nonce};
         // 将token、timestamp、nonce三个参数进行字典序排序
         Arrays.sort(arr);
+        log.debug("the token is:" + appConfig.getToken());
         StringBuilder content = new StringBuilder();
         for (String str : arr) {
             content.append(str);
