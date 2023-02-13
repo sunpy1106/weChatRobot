@@ -8,3 +8,4 @@ spring:
 app:
   token: $TOKEN
   apiKey: $APIKEY
+  openaiKey: $OPENAIKEY

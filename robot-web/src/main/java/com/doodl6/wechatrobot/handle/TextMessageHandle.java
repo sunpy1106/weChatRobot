@@ -3,6 +3,7 @@ package com.doodl6.wechatrobot.handle;
 import com.doodl6.wechatrobot.config.KeywordConfig;
 import com.doodl6.wechatrobot.domain.WeChatMessage;
 import com.doodl6.wechatrobot.response.BaseMessage;
+import com.doodl6.wechatrobot.service.OpenAIService;
 import com.doodl6.wechatrobot.service.TulingService;
 import com.doodl6.wechatrobot.util.LogUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,9 @@ public class TextMessageHandle implements WeChatMessageHandle {
     @Resource
     private TulingService tulingService;
 
+    @Resource
+    private OpenAIService openAIService;
+
     @Autowired(required = false)
     private KeywordConfig keywordConfig;
 
@@ -32,14 +36,18 @@ public class TextMessageHandle implements WeChatMessageHandle {
         String fromUserName = weChatMessage.getFromUserName();
         String toUserName = weChatMessage.getToUserName();
         String content = weChatMessage.getContent();
+        Long  askts = weChatMessage.getCreateTime();
 
         BaseMessage message = null;
         if (keywordConfig != null) {
             message = keywordConfig.getMessageByKeyword(content);
         }
 
-        if (message == null) {
-            message = tulingService.getTulingResponse(content, fromUserName);
+//        if (message == null) {
+//            message = tulingService.getTulingResponse(content, fromUserName);
+//        }
+        if(message == null ){
+            message = openAIService.getOpenAIResponse(content,fromUserName,askts);
         }
 
         if (message != null) {

@@ -23,4 +23,7 @@ public class AppConfig {
      * 图灵机器人应用key
      */
     public String apiKey;
+
+    public String openaiKey;
+
 }
