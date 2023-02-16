@@ -1,4 +1,5 @@
 package com.doodl6.wechatrobot.util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -8,57 +9,55 @@ import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 
+@Slf4j
 public class Producer extends Thread {
-    private final KafkaProducer<Integer, String> producer;
-    private final String topic;
-    private final Boolean isAsync;
+    private final KafkaProducer<String, String> producer;
 
-    public Producer(String topic, Boolean isAsync) {
+
+    public Producer(String bootstrapServer) {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaProperties.KAFKA_SERVER_URL + ":" + KafkaProperties.KAFKA_SERVER_PORT);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "DemoProducer");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producer = new KafkaProducer<>(props);
-        this.topic = topic;
-        this.isAsync = isAsync;
+
     }
 
-    public void run() {
-        int messageNo = 1;
-        while (true) {
-            String messageStr = "Message_" + messageNo;
-            long startTime = System.currentTimeMillis();
-            if (isAsync) { // Send asynchronously
-                producer.send(new ProducerRecord<>(topic,
-                        messageNo,
-                        messageStr), new DemoCallBack(startTime, messageNo, messageStr));
-            } else { // Send synchronously
-                try {
-                    producer.send(new ProducerRecord<>(topic,
-                            messageNo,
-                            messageStr)).get();
-                    System.out.println("Sent message: (" + messageNo + ", " + messageStr + ")");
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+
+    public boolean produce(String topic, String msg) {
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, msg);
+        long startTime = System.currentTimeMillis();
+        producer.send(record, new MsgSendCallBack(startTime, msg) {
+            @Override
+            public void onCompletion(RecordMetadata metadata, Exception exception) {
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                if (metadata != null) {
+                    System.out.println(
+                            "message(" + msg + ") sent to partition(" + metadata.partition() +
+                                    "), " +
+                                    "offset(" + metadata.offset() + ") in " + elapsedTime + " ms");
+                } else {
+                    exception.printStackTrace();
                 }
             }
-            ++messageNo;
-        }
+        });
+
+        return true;
     }
+
 }
 
-class DemoCallBack implements Callback {
+class MsgSendCallBack implements Callback {
 
     private final long startTime;
-    private final int key;
+
     private final String message;
 
-    public DemoCallBack(long startTime, int key, String message) {
+    public MsgSendCallBack(long startTime,  String message) {
         this.startTime = startTime;
-        this.key = key;
+
         this.message = message;
     }
 
@@ -75,7 +74,7 @@ class DemoCallBack implements Callback {
         long elapsedTime = System.currentTimeMillis() - startTime;
         if (metadata != null) {
             System.out.println(
-                    "message(" + key + ", " + message + ") sent to partition(" + metadata.partition() +
+                    "message("  + message + ") sent to partition(" + metadata.partition() +
                             "), " +
                             "offset(" + metadata.offset() + ") in " + elapsedTime + " ms");
         } else {

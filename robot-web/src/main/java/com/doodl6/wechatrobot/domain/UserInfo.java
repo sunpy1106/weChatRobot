@@ -1,4 +1,4 @@
-package com.doodl6.wechatrobot.config;
+package com.doodl6.wechatrobot.domain;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package com.doodl6.wechatrobot.service;
 
 import com.doodl6.wechatrobot.config.AppConfig;
-import com.doodl6.wechatrobot.config.UserInfo;
+import com.doodl6.wechatrobot.domain.UserInfo;
 import com.doodl6.wechatrobot.response.BaseMessage;
 import com.doodl6.wechatrobot.response.TextMessage;
 import com.theokanning.openai.OpenAiService;
