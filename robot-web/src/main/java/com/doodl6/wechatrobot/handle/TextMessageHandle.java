@@ -39,6 +39,7 @@ public class TextMessageHandle implements WeChatMessageHandle {
         Long  askts = weChatMessage.getCreateTime();
 
         BaseMessage message = null;
+        //匹配了关键字
         if (keywordConfig != null) {
             message = keywordConfig.getMessageByKeyword(content);
         }
@@ -47,7 +48,7 @@ public class TextMessageHandle implements WeChatMessageHandle {
 //            message = tulingService.getTulingResponse(content, fromUserName);
 //        }
         if(message == null ){
-            message = openAIService.getOpenAIResponse(content,fromUserName,askts);
+            message = openAIService.getOpenAIResponse(content,fromUserName,toUserName,askts);
         }
 
         if (message != null) {

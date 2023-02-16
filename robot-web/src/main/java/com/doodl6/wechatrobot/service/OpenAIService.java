@@ -28,7 +28,7 @@ public class OpenAIService {
     private Map questionList = new HashMap<String, ArrayList<String>>();
 
 
-    public BaseMessage getOpenAIResponse(String content, String fromUserName, Long askts){
+    public BaseMessage getOpenAIResponse(String content, String fromUserName, String toUserName,Long askts){
         log.debug(" the content:" + content + ",fromUserName :" + fromUserName + ",askts:"+ askts.toString());
         //注册用户信息，统计访问次数
         registerUserInfo(fromUserName,askts);
