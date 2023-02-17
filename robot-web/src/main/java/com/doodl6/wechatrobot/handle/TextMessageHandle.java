@@ -9,7 +9,6 @@ import com.doodl6.wechatrobot.service.KafkaService;
 import com.doodl6.wechatrobot.service.OpenAIService;
 import com.doodl6.wechatrobot.service.TulingService;
 import com.doodl6.wechatrobot.util.LogUtil;
-import com.doodl6.wechatrobot.util.Producer;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ public class TextMessageHandle implements WeChatMessageHandle {
 
     @Autowired
     private KafkaService kafkaService;
+
     @Override
     public BaseMessage processMessage(WeChatMessage weChatMessage) {
 
@@ -59,8 +59,9 @@ public class TextMessageHandle implements WeChatMessageHandle {
             message = new TextMessage("success");
             MsgItem msg = new MsgItem(fromUserName,toUserName,content,askts);
             String msgContent = new Gson().toJson(msg);
-            kafkaService.send("msg_content",msgContent);
-            openAIService.getOpenAIResponse(content,fromUserName,toUserName,askts);
+            log.info("Write Msg \" "+ msgContent +" \" to Kafka topic msg_content" );
+            kafkaService.sendMessage("msg_content",msgContent);
+            //openAIService.getOpenAIResponse(content,fromUserName,toUserName,askts);
         }
 
         if (message != null) {

@@ -26,4 +26,6 @@ public class AppConfig {
 
     public String openaiKey;
 
+    public String kafkaServer;
+
 }

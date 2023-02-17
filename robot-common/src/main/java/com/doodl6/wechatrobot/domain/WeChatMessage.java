@@ -7,6 +7,7 @@ import lombok.Setter;
 
 /**
  * 微信消息结构类
+ * @author sunpy
  */
 @Getter
 @Setter

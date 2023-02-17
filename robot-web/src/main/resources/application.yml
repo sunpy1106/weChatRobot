@@ -2,7 +2,13 @@ server:
   servlet:
     encoding:
       charset: UTF-8
+
 spring:
+  kafka:
+    producer:
+      bootstrap-servers: 43.134.173.15:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   profiles:
     active: @activeProfile@
 app:
